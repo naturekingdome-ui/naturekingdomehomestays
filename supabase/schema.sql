@@ -9,6 +9,8 @@ create table if not exists blog_posts (
   content text,
   cover_image_url text,
   category text,
+  meta_title text,
+  meta_description text,
   published boolean not null default false,
   published_at timestamptz,
   created_at timestamptz not null default now(),

@@ -23,6 +23,8 @@ export type PostForm = {
   cover_image_url: string;
   category: string;
   published: boolean;
+  meta_title: string;
+  meta_description: string;
 };
 
 type Props = {
@@ -51,6 +53,8 @@ export default function BlogEditor({ initialData, mode }: Props) {
     cover_image_url: initialData?.cover_image_url ?? "",
     category: initialData?.category ?? "",
     published: initialData?.published ?? false,
+    meta_title: initialData?.meta_title ?? "",
+    meta_description: initialData?.meta_description ?? "",
   });
 
   const [slugManual, setSlugManual] = useState(mode === "edit");
@@ -295,6 +299,45 @@ export default function BlogEditor({ initialData, mode }: Props) {
             className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-[#e9c349]/40 resize-none"
           />
           <p className="text-[10px] text-white/20 mt-1">{form.excerpt.length}/160 characters</p>
+        </div>
+
+        {/* SEO meta overrides */}
+        <div className="border border-white/10 rounded-xl p-5 space-y-4">
+          <p className="text-[10px] text-white/30 uppercase tracking-widest">
+            SEO <span className="normal-case text-white/20 ml-1">(optional — overrides the search-result title/description)</span>
+          </p>
+
+          <div>
+            <label className="block text-[10px] text-white/30 uppercase tracking-widest mb-1.5">
+              Meta title <span className="normal-case text-white/20 ml-1">(falls back to the post title)</span>
+            </label>
+            <input
+              type="text"
+              placeholder={form.title || "Search-result title"}
+              value={form.meta_title}
+              onChange={(e) => setForm((f) => ({ ...f, meta_title: e.target.value }))}
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-2.5 text-sm text-white placeholder-white/20 focus:outline-none focus:border-[#e9c349]/40"
+            />
+            <p className={`text-[10px] mt-1 ${form.meta_title.length > 60 ? "text-amber-400/70" : "text-white/20"}`}>
+              {form.meta_title.length}/60 characters
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-[10px] text-white/30 uppercase tracking-widest mb-1.5">
+              Meta description <span className="normal-case text-white/20 ml-1">(falls back to the excerpt)</span>
+            </label>
+            <textarea
+              rows={2}
+              placeholder={form.excerpt || "Search-result description"}
+              value={form.meta_description}
+              onChange={(e) => setForm((f) => ({ ...f, meta_description: e.target.value }))}
+              className="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-white/20 focus:outline-none focus:border-[#e9c349]/40 resize-none"
+            />
+            <p className={`text-[10px] mt-1 ${form.meta_description.length > 160 ? "text-amber-400/70" : "text-white/20"}`}>
+              {form.meta_description.length}/160 characters
+            </p>
+          </div>
         </div>
 
         {/* Content */}

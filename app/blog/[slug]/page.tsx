@@ -18,6 +18,8 @@ type Post = {
   category: string | null;
   published: boolean;
   published_at: string | null;
+  meta_title: string | null;
+  meta_description: string | null;
 };
 
 async function getPost(slug: string): Promise<Post | null> {
@@ -39,12 +41,16 @@ export async function generateMetadata({
   const post = await getPost(slug);
   if (!post) return {};
 
+  const metaTitle = post.meta_title?.trim() || post.title;
+  const metaDescription = post.meta_description?.trim() || post.excerpt || undefined;
+
   return {
-    title: post.title,
-    description: post.excerpt ?? undefined,
+    title: metaTitle,
+    description: metaDescription,
+    alternates: { canonical: `${BASE_URL}/blog/${post.slug}` },
     openGraph: {
-      title: post.title,
-      description: post.excerpt ?? undefined,
+      title: metaTitle,
+      description: metaDescription,
       type: "article",
       url: `${BASE_URL}/blog/${post.slug}`,
       images: post.cover_image_url
@@ -157,7 +163,7 @@ export default async function BlogPostPage({
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     headline: post.title,
-    description: post.excerpt,
+    description: post.meta_description?.trim() || post.excerpt,
     image: post.cover_image_url,
     datePublished: post.published_at,
     author: { "@type": "Organization", name: "Nature Kingdom" },
