@@ -218,8 +218,10 @@ export default async function BlogPostPage({
 
         {/* Header */}
         <section
-          className="px-[8vw]"
+          className="px-6 sm:px-10"
           style={{
+            maxWidth: "820px",
+            marginInline: "auto",
             paddingTop: post.cover_image_url ? "3rem" : "8rem",
             paddingBottom: "3rem",
             borderBottom: "1px solid rgba(233,195,73,0.1)",
@@ -276,7 +278,6 @@ export default async function BlogPostPage({
               color: "#f5f5f0",
               fontWeight: 400,
               lineHeight: 1.15,
-              maxWidth: "780px",
             }}
           >
             {post.title}
@@ -289,7 +290,6 @@ export default async function BlogPostPage({
                 color: "#8d928d",
                 fontSize: "1.05rem",
                 lineHeight: 1.7,
-                maxWidth: "620px",
                 marginTop: "1.25rem",
               }}
             >
@@ -299,7 +299,7 @@ export default async function BlogPostPage({
         </section>
 
         {/* Content */}
-        <section className="px-[8vw] py-16" style={{ maxWidth: "820px" }}>
+        <section className="px-6 sm:px-10 py-16" style={{ maxWidth: "820px", marginInline: "auto" }}>
           {post.content ? (
             <div>{renderContent(post.content)}</div>
           ) : (
