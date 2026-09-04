@@ -8,6 +8,10 @@ import Navigation from "@/components/Navigation";
 
 const BASE_URL = "https://www.naturekingdomhomestay.com";
 
+// Regenerate published posts periodically so admin edits go live without a
+// redeploy. New slugs are still rendered on-demand and then cached.
+export const revalidate = 60;
+
 type Post = {
   id: string;
   title: string;

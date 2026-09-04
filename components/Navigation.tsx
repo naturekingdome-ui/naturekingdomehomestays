@@ -25,7 +25,7 @@ export default function Navigation({ onEnquireClick }: NavigationProps) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1.2, ease: [0.25, 1, 0.5, 1] as [number, number, number, number] }}
-        className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 sm:px-10 py-6 sm:py-8 mix-blend-difference"
+        className="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-6 sm:px-10 py-6 sm:py-8 pb-12 bg-gradient-to-b from-black/60 via-black/25 to-transparent"
       >
         {/* Brand + desktop nav */}
         <div className="flex items-center space-x-12">
@@ -37,7 +37,7 @@ export default function Navigation({ onEnquireClick }: NavigationProps) {
               <a
                 key={item.href}
                 href={item.href}
-                className="text-[10px] tracking-[0.3em] uppercase text-on-surface/50 hover:text-[#e9c349] hover:opacity-100 transition-all duration-300 relative group"
+                className="text-[10px] tracking-[0.3em] uppercase text-[#F4E7D6] hover:text-[#e9c349] transition-all duration-300 relative group"
               >
                 {item.label}
                 <span className="absolute bottom-[-4px] left-0 w-0 h-[1px] bg-[#e9c349] transition-all duration-300 group-hover:w-full" />
