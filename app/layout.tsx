@@ -100,9 +100,31 @@ export const metadata: Metadata = {
 
 /* ── Structured Data ────────────────────────────────────────────────
    LodgingBusiness covers LocalBusiness as its parent type.
-   geo omitted: add latitude/longitude once the property pin is
-   confirmed in Google Maps (replace this comment with a geo block).
 ──────────────────────────────────────────────────────────────────── */
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Nature Kingdom",
+  url: BASE_URL,
+  logo: `${BASE_URL}/logobest.png`,
+  telephone: "+91 9148678686",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Bommenahalli, Mallenahalli Post",
+    addressLocality: "Chikmagalur",
+    addressRegion: "Karnataka",
+    postalCode: "577137",
+    addressCountry: "IN",
+  },
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Nature Kingdom",
+  url: BASE_URL,
+};
+
 const lodgingSchema = {
   "@context": "https://schema.org",
   "@type": "LodgingBusiness",
@@ -157,10 +179,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${hanken.variable} ${playfair.variable}`}>
+    <html lang="en-IN" className={`${hanken.variable} ${playfair.variable}`}>
       <head>
 
-        {/* Structured Data — LodgingBusiness (covers LocalBusiness) */}
+        {/* Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(lodgingSchema) }}
