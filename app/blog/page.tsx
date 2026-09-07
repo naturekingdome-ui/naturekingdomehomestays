@@ -5,14 +5,26 @@ import { supabase } from "@/lib/supabase";
 import LuxuryFooter from "@/components/LuxuryFooter";
 import Navigation from "@/components/Navigation";
 
+// Regenerate the listing periodically so newly published / edited posts
+// appear without a full redeploy.
+export const revalidate = 60;
+
 export const metadata: Metadata = {
-  title: "Travel Blog — Chikmagalur Guides & Nature Stories",
+  title: { absolute: "Chikmagalur Travel Guide & Local Tips | Nature Kingdom Homestay" },
   description:
-    "Explore Chikmagalur through local eyes — travel guides, trekking tips, coffee estate stories, and family getaway ideas from Nature Kingdom.",
+    "Explore Chikmagalur travel guides, trekking routes, coffee estate stories, nearby attractions, weekend itineraries and local tips from Nature Kingdom.",
+  keywords: [
+    "Chikmagalur travel guide",
+    "Chikmagalur blog",
+    "things to do in Chikmagalur",
+    "Chikmagalur itinerary",
+    "Chikmagalur trekking",
+    "coffee estate Chikmagalur",
+  ],
   openGraph: {
-    title: "Nature Kingdom Blog — Chikmagalur Travel Guides",
+    title: "Chikmagalur Travel Guide & Local Tips | Nature Kingdom Homestay",
     description:
-      "Local travel guides, weekend getaway ideas, and nature stories from Chikmagalur, Karnataka.",
+      "Explore Chikmagalur travel guides, trekking routes, coffee estate stories, nearby attractions, weekend itineraries and local tips from Nature Kingdom.",
   },
 };
 
