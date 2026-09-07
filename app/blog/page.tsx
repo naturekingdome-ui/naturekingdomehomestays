@@ -26,7 +26,10 @@ export const metadata: Metadata = {
     description:
       "Explore Chikmagalur travel guides, trekking routes, coffee estate stories, nearby attractions, weekend itineraries and local tips from Nature Kingdom.",
   },
+  alternates: { canonical: "https://www.naturekingdomhomestay.com/blog" },
 };
+
+const PAGE_SIZE = 9;
 
 type Post = {
   id: string;
@@ -38,13 +41,18 @@ type Post = {
   published_at: string | null;
 };
 
-async function getPosts(): Promise<Post[]> {
-  const { data } = await supabase
+async function getPosts(page: number): Promise<{ posts: Post[]; total: number }> {
+  const from = (page - 1) * PAGE_SIZE;
+  const to = from + PAGE_SIZE - 1;
+  const { data, count } = await supabase
     .from("blog_posts")
-    .select("id, title, slug, excerpt, cover_image_url, category, published_at")
+    .select("id, title, slug, excerpt, cover_image_url, category, published_at", {
+      count: "exact",
+    })
     .eq("published", true)
-    .order("published_at", { ascending: false });
-  return data ?? [];
+    .order("published_at", { ascending: false })
+    .range(from, to);
+  return { posts: data ?? [], total: count ?? 0 };
 }
 
 function formatDate(dateStr: string) {
@@ -55,8 +63,33 @@ function formatDate(dateStr: string) {
   });
 }
 
-export default async function BlogPage() {
-  const posts = await getPosts();
+export default async function BlogPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ page?: string }>;
+}) {
+  const { page: pageParam } = await searchParams;
+  const page = Math.max(1, parseInt(pageParam ?? "1", 10) || 1);
+  const { posts, total } = await getPosts(page);
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+
+  const pillBase = {
+    fontFamily: "'Hanken Grotesk', sans-serif",
+    fontSize: "0.75rem",
+    letterSpacing: "0.1em",
+    padding: "0.5rem 0.9rem",
+    border: "1px solid rgba(233,195,73,0.25)",
+    borderRadius: "2px",
+    textDecoration: "none",
+    transition: "all 0.25s ease",
+  } as const;
+  const pillIdle = { ...pillBase, color: "#8d928d" };
+  const pillActive = {
+    ...pillBase,
+    color: "#0a0a0a",
+    background: "#e9c349",
+    borderColor: "#e9c349",
+  };
 
   return (
     <>
@@ -110,7 +143,12 @@ export default async function BlogPage() {
         <section className="px-[8vw] py-20">
           {posts.length === 0 ? (
             <p style={{ color: "#c3c8c2", fontFamily: "'Hanken Grotesk', sans-serif" }}>
-              No posts published yet — check back soon.
+              {total === 0
+                ? "No posts published yet — check back soon."
+                : "Nothing on this page."}{" "}
+              <Link href="/blog" style={{ color: "#e9c349" }}>
+                Back to the latest
+              </Link>
             </p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -235,6 +273,37 @@ export default async function BlogPage() {
                 </Link>
               ))}
             </div>
+          )}
+
+          {totalPages > 1 && (
+            <nav
+              className="flex items-center justify-center flex-wrap gap-2 mt-20"
+              aria-label="Blog pagination"
+            >
+              {page > 1 && (
+                <Link
+                  href={page - 1 === 1 ? "/blog" : `/blog?page=${page - 1}`}
+                  style={pillIdle}
+                >
+                  ← Prev
+                </Link>
+              )}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((n) => (
+                <Link
+                  key={n}
+                  href={n === 1 ? "/blog" : `/blog?page=${n}`}
+                  aria-current={n === page ? "page" : undefined}
+                  style={n === page ? pillActive : pillIdle}
+                >
+                  {n}
+                </Link>
+              ))}
+              {page < totalPages && (
+                <Link href={`/blog?page=${page + 1}`} style={pillIdle}>
+                  Next →
+                </Link>
+              )}
+            </nav>
           )}
         </section>
       </main>
