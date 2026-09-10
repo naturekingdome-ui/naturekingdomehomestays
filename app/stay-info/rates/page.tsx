@@ -27,7 +27,10 @@ export const metadata: Metadata = {
 
 async function fetchPackages(): Promise<ApiPackage[]> {
   try {
-    const { data, error } = await supabaseAdmin.from("packages").select("*").order("number");
+    const { data, error } = await supabaseAdmin
+      .from("packages")
+      .select("*")
+      .order("price", { ascending: true });
     if (error) throw error;
     return data ?? [];
   } catch {

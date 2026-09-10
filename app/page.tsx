@@ -7,6 +7,20 @@ import { fetchUpcomingSeasonalRates, type UpcomingSeason } from "@/lib/pricing";
 export const revalidate = 60;
 
 export const metadata: Metadata = {
+  title: { absolute: "Best Homestay in Chikmagalur | Nature Kingdom" },
+  description:
+    "Experience a peaceful nature homestay in Chikmagalur surrounded by coffee estates, misty mountains and the Western Ghats. Enjoy luxury stays, estate walks, home-style meals and campfire evenings.",
+  keywords: [
+    "Chikmagalur homestay",
+    "best homestay in Chikmagalur",
+    "luxury homestay Chikmagalur",
+    "nature stay Chikmagalur",
+    "coffee estate stay",
+    "Chikmagalur resort",
+    "coffee estate homestay",
+    "Western Ghats stay",
+    "Chikkamagaluru homestay",
+  ],
   alternates: {
     canonical: "https://www.naturekingdomhomestay.com/",
   },
@@ -17,7 +31,7 @@ async function fetchPackages(): Promise<ApiPackage[]> {
     const { data, error } = await supabaseAdmin
       .from("packages")
       .select("*")
-      .order("number");
+      .order("price", { ascending: true });
     if (error) throw error;
     return data ?? [];
   } catch {
